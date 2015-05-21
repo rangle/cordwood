@@ -22,5 +22,16 @@ function hasFileExtension(filename, extension) {
   }
 };
 
+/**
+ * Function for converting camel-case strings to snake-case
+ * @param str : The string to convert
+ **/
+var toSnakeCase = function(str) {
+  return str.replace(/([A-Z])/g, function(s) {
+    return '-' + s.toLowerCase();
+  });
+};
+
 
 module.exports.hasFileExtension = hasFileExtension;
+module.exports.toSnakeCase = toSnakeCase;

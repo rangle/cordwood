@@ -1,16 +1,19 @@
-var version = require('./version');
 var bootstrap = require('./bootstrap');
-var logger = require('./logger');
 var downloadService = require('./download-service');
+var logger = require('./logger');
+var ui = require('./ui');
+var urls = require('./urls');
+var version = require('./version');
 
 /* Cordwood
 –––––––––––––––––––––––––––––––––––––––––––––––––– */
 function Cordwood(options) {
-  var versionUrl = options.versionUrl;
-  var urls = [options.javascriptUrl, options.cssUrl];
+  urls.setBase(options.baseUrl);
+  urls.initForMaster();
   var currentVersion = options.currentVersion;
   var successCallback = options.successCallback;
   var errorCallback = options.errorCallback;
+  var multipleVersions = options.multipleVersions || false;
 
   (function setup() {
 
@@ -21,16 +24,16 @@ function Cordwood(options) {
       version.setCurrent(currentVersion);
     }
 
-    // Fetch the latest version number
-    version.fetchLatestVersion(versionUrl, function() {
-      if (version.didUpdate()) {
-        logger('version changed calling api to download files');
-        downloadUpdatedApp(urls, version.getUpdated());
-      } else {
-        logger('version did not change loading version: %s', version.getCurrent());
-        bootstrap.init(version.getCurrent());
-      }
-    });
+    if (multipleVersions) {
+      // Fetch all available versions
+      version.fetchAllVersions(urls.allVersions, onFetchAllVersions, function(url) {
+        // If Fetch all versions fails then default to refreshing master
+        version.fetchLatestVersion(urls.latestVersion, onFetchLatestVersion);
+      });
+    } else {
+      // Fetch the latest version number and respond accordingly
+      version.fetchLatestVersion(urls.latestVersion, onFetchLatestVersion);
+    }
   })();
 
   /**
@@ -45,17 +48,45 @@ function Cordwood(options) {
   };
 
   /**
-   * Callback for once all of the files have been downloaded. Uses the bootstrap
-   * to add the files to the DOM.
+   * Callback for once all of the files have been downloaded.
+   * Uses the bootstrap to add the files to the DOM.
    **/
   function allFilesDownloaded(files) {
     version.setCurrent(version.getUpdated())
     bootstrap.init(version.getCurrent());
   };
 
+  /**
+   * Error callback for when file download fails.
+   */
   function errorWhileDownloading(error) {
     logger(error);
-    init();
+    bootstrap.init(version.getCurrent());
+  };
+
+  /**
+   * This function checks to see if the version updated or not.
+   * If it did it will initiate download of the new version.
+   * Otherwise it will bootstrap using the existing version
+   */
+  function onFetchLatestVersion() {
+    if (version.didUpdate()) {
+      logger('version changed calling api to download files');
+      downloadUpdatedApp(urls.files, version.getUpdated());
+    } else {
+      logger('version did not change loading version: %s', version.getCurrent());
+      bootstrap.init(version.getCurrent());
+    }
+  };
+
+  /**
+   * Success callback for fetching all versions.
+   */
+  function onFetchAllVersions(versions) {
+    ui.init(versions, function(url) {
+      ui.teardown();
+      version.fetchLatestVersion(url, onFetchLatestVersion);
+    });
   };
 };
 

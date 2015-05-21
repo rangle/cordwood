@@ -27,4 +27,25 @@ describe('Utils', function() {
       expect(utils.hasFileExtension('my-file-name.js.nope', 'js')).to.be.false;
     });
   });
+
+  describe('toSnakeCase', function() {
+
+    it('should work for camelCase', function() {
+      expect(utils.toSnakeCase('mySnakeTest')).to.equal('my-snake-test');
+    });
+
+    it('should work with numbers', function() {
+      expect(utils.toSnakeCase('mySnake123Test')).to.equal('my-snake123-test');
+    });
+
+    it('should work with all lowercase strings', function() {
+      expect(utils.toSnakeCase('mysnaketest')).to.equal('mysnaketest');
+    });
+
+    it('should fail for space separated words', function() {
+      expect(utils.toSnakeCase('my snake test')).to.not.equal('mySnakeTest');
+    });
+
+  });
+
 });

@@ -7,6 +7,44 @@ var logger = require('./logger');
 var version = {};
 
 /**
+ * Retrieve the list of available versions from the specified URL.
+ * If successful, run the callback and pass in the list of versions.
+ * @param url : The URL where the versions list can be retrieved.
+ * @param successCallback : The callback for when the version
+ * request completes.
+ * @param errorCallback : The callback for when the version request fails.
+ */
+version.fetchAllVersions = function(url, successCallback, errorCallback) {
+  logger('fetching all available versions from %s', url);
+
+  var xhr = new XMLHttpRequest();
+  xhr.open('GET', (url + '?' + (new Date()).getTime()), true);
+  xhr.responseType = 'json';
+  xhr.timeout = 4000;
+
+  xhr.ontimeout = function() {
+    logger('unable to get all versions; Timed out');
+    errorCallback();
+  };
+
+  xhr.onerror = function(e) {
+    logger('unable to get all versions', e);
+    errorCallback();
+  };
+
+  xhr.onreadystatechange = function(e) {
+    if (this.readyState == 4 && this.status == 200) {
+      successCallback(this.response.prs);
+    }
+  };
+
+  xhr.send();
+
+  // Make the xhr object available to unit tests.
+  return xhr;
+};
+
+/**
  * Retrieve the version of code to use from the specified URL.
  * This will set the updated version. If successful, using the version that was
  * retrieved; and if there was a problem, using the version that is currently
@@ -15,11 +53,11 @@ var version = {};
  * @param versionUrl : The URL where the version can be retrieved.
  * @param callback : The callback for when the version request completes.
  **/
-version.fetchLatestVersion = function(versionUrl, callback) {
-  logger('fetching new version from %s', versionUrl);
+version.fetchLatestVersion = function(url, callback) {
+  logger('fetching new version from %s', url);
 
   var xhr = new XMLHttpRequest();
-  xhr.open('GET', (versionUrl + '?' + (new Date()).getTime()), true);
+  xhr.open('GET', (url + '?' + (new Date()).getTime()), true);
   xhr.responseType = 'json';
   xhr.timeout = 4000;
 
