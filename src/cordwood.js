@@ -6,7 +6,7 @@ var urls = require('./urls');
 var version = require('./version');
 
 /* Cordwood
-–––––––––––––––––––––––––––––––––––––––––––––––––– */
+-------------------------------------------------- */
 function Cordwood(options) {
   urls.setBase(options.baseUrl);
   urls.initForMaster();

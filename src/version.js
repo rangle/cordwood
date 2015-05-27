@@ -3,7 +3,7 @@ var bootstrap = require('./bootstrap');
 var logger = require('./logger');
 
 /* Version Check
-–––––––––––––––––––––––––––––––––––––––––––––––––– */
+-------------------------------------------------- */
 var version = {};
 
 /**

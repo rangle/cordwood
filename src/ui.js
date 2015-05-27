@@ -3,7 +3,7 @@ var version = require('./version');
 var urls = require('./urls');
 
 /* Version Selector UI
-–––––––––––––––––––––––––––––––––––––––––––––––––– */
+-------------------------------------------------- */
 var body, head;
 
 /**

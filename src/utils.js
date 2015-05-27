@@ -1,6 +1,6 @@
 
 /* Utils
-–––––––––––––––––––––––––––––––––––––––––––––––––– */
+-------------------------------------------------- */
 
 /**
  * Function for checking if the filename ends with the provided file extension.

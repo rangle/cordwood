@@ -3,7 +3,7 @@ var utils = require('./utils');
 var logger = require('./logger');
 
 /* Download Service
-–––––––––––––––––––––––––––––––––––––––––––––––––– */
+-------------------------------------------------- */
 var downloadService = {};
 
 var downloadsQueue = [];
