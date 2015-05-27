@@ -1,5 +1,6 @@
 var version = require('../src/version');
 var logger = require('../src/logger');
+var mockVersions = require('./mocks/versions');
 
 describe('Version', function() {
 
@@ -98,6 +99,57 @@ describe('Version', function() {
       // Verify these are unchanged.
       expect(version.getCurrent()).to.equal('1.0.2');
       expect(version.getUpdated()).to.equal('1.0.2');
+    });
+
+  });
+
+  describe('fetchAllVersions', function() {
+
+    beforeEach(function () {
+      this.server = sinon.fakeServer.create();
+      this.server.xhr.useFilters = true;
+      this.server.autoRespond = true;
+    });
+
+    afterEach(function () {
+      this.server.respond();
+      this.server.restore();
+    });
+
+    it('should be able to fetch all available versions', function() {
+      this.server.respondWith(/\/versions\?(\d+)/, function(xhr, id) {
+        xhr.response = mockVersions;
+        xhr.respond(200,
+          { 'Content-Type': 'application/json' },
+          JSON.stringify(mockVersions));
+        });
+
+      version.fetchAllVersions('/versions', function(versions) {
+        expect(versions).to.be.equal(mockVersions.list);
+      });
+
+    });
+
+    it('should invoke an error handler when the request aborts', function () {
+      var errorCallbackStub = sinon.stub();
+
+      var xhr = version.fetchAllVersions('/versions', null, errorCallbackStub);
+      var onerrorSpy = sinon.spy(xhr, 'onerror');
+      xhr.abort();
+
+      this.server.respond([500, {}, 'error']);
+
+      expect(errorCallbackStub.called).to.be.true;
+      expect(onerrorSpy.called).to.be.true;
+    });
+
+    it('should behave as expected when a timeout occurs', function () {
+      var errorCallbackStub = sinon.stub();
+
+      var xhr = version.fetchAllVersions('/versions', null, errorCallbackStub);
+      xhr.ontimeout();
+
+      expect(errorCallbackStub.called).to.be.true;
     });
 
   });

@@ -1,7 +1,7 @@
 var logger = require('./logger');
 
 /* Read Service
-–––––––––––––––––––––––––––––––––––––––––––––––––– */
+-------------------------------------------------- */
 var readService = {};
 
 var readQueue = [];

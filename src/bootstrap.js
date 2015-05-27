@@ -4,7 +4,7 @@ var utils = require('./utils');
 var logger = require('./logger');
 
 /* Read and Load Files
-–––––––––––––––––––––––––––––––––––––––––––––––––– */
+-------------------------------------------------- */
 var bootstrap = {};
 
 /**

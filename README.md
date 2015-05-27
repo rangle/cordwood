@@ -43,17 +43,17 @@ function successCallback() {
 
 function errorCallback() {
   console.log('error reading files');
-  window.location = "error.html";
+  window.location = 'error.html';
 };
 
-document.addEventListener("deviceready", function(){
-  var options = {};
-  options.versionUrl = 'http://10.0.1.79:8080/version.json';
-  options.javascriptUrl = 'http://10.0.1.79:8080/app.js';
-  options.cssUrl = 'http://10.0.1.79:8080/app.css';
-  options.currentVersion = '1.0.0';
-  options.successCallback = successCallback;
-  options.errorCallback = errorCallback;
+document.addEventListener('deviceready', function(){
+  var options = {
+    baseUrl: 'http://10.0.1.79:8080',
+    currentVersion: '1.0.0',
+    successCallback: successCallback,
+    errorCallback: errorCallback,
+    multipleVersions: true
+  };
 
   Cordwood(options);
 }, false);

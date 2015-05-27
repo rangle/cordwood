@@ -18,9 +18,11 @@ gulp.task('scripts', function() {
           })
           .pipe(rename('cordwood.js'))
           .pipe(gulp.dest('./dist'))
+          .pipe(gulp.dest('./example/www'))
           .pipe(uglify())
           .pipe(rename('cordwood.min.js'))
-          .pipe(gulp.dest('./dist'));
+          .pipe(gulp.dest('./dist'))
+          .pipe(gulp.dest('./example/www'));
 });
 
 

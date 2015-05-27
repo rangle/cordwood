@@ -1,6 +1,6 @@
 
 /* Cordova Mocks
-–––––––––––––––––––––––––––––––––––––––––––––––––– */
+-------------------------------------------------- */
 function FileTransfer() {
   this.download = function(url, nativeURL, sCB, eCB) {
     sCB();
