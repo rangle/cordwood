@@ -10,7 +10,7 @@ var body, head;
  * Helper to generate text content of the list item
  */
 function itemContent(item) {
-  return '<strong>PR# ' + item.number + ':</strong> ' + item.name;
+  return ['<strong>PR#', item.pr, '</strong>', '(', item.branch, ')'].join(' ');
 }
 
 /**

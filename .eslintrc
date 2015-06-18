@@ -6,7 +6,9 @@
   },
   "globals": {
     "cordova": true,
-    "FileTransfer": true
+    "FileTransfer": true,
+    "FileError": true,
+    "resolveLocalFileSystemURL": true
   },
   "rules": {
     "camelcase": 2,

@@ -66,7 +66,8 @@ describe('Bootstrap', function() {
       expect(setupArgs[0]).to.be.a('function');
       expect(setupArgs[1]).to.be.a('function');
 
-      var expectedFiles = ['v_1.0.0_app.js', 'v_1.0.0_app.css'];
+      // TODO move those out. Wrong test
+      var expectedFiles = ['v_1.0.0_app.js', 'www/css/v_1.0.0_app.css'];
       expect(readFilesSpy.calledWith(expectedFiles)).to.be.true;
     });
   });

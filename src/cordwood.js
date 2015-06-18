@@ -1,5 +1,6 @@
 'use strict';
 var bootstrap = require('./bootstrap');
+var assetService = require('./asset-service');
 var downloadService = require('./download-service');
 var logger = require('./logger');
 var ui = require('./ui');
@@ -15,8 +16,11 @@ function Cordwood(options) {
   var successCallback = options.successCallback;
   var errorCallback = options.errorCallback;
   var multipleVersions = options.multipleVersions || false;
+  var assetDirectories = options.assetDirectories;
 
   (function setup() {
+
+    assetService.setup(assetDirectories);
 
     // Setup the callbacks for bootstrapping the app
     bootstrap.setup(successCallback, errorCallback);
@@ -36,6 +40,7 @@ function Cordwood(options) {
       // Fetch the latest version number and respond accordingly
       version.fetchLatestVersion(urls.latestVersion, onFetchLatestVersion);
     }
+
   })();
 
   /**

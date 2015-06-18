@@ -29,7 +29,7 @@ bootstrap.setup = function (successCallback, errorCallback) {
 bootstrap.init = function (version) {
   var files = [
     version + '_' + constants.JS_FILE_NAME,
-    version + '_' + constants.CSS_FILE_NAME
+    constants.CSS_DIRECTORY + version + '_' + constants.CSS_FILE_NAME
   ];
 
   readService.setup(injectAllFiles, errorReadingFiles);

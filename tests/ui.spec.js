@@ -42,7 +42,7 @@ describe('UI', function() {
       var items = this.body.getElementsByTagName('li');
       expect(items).to.have.length(versions.prs.length);
 
-      expect(items[0].innerText).to.be.equal('PR# 42: Feature foo');
+      expect(items[0].innerText).to.be.equal('PR# 42 ( dev )');
       expect(items[0].onclick).to.be.exist;
       expect(items[0].onclick()).to.equal(urls.latestVersion);
     });

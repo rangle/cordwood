@@ -86,11 +86,13 @@ function checkAllFilesDownloaded() {
  * @param url - The URL to download.
  **/
 function downloadFile(url) {
+  var destinationDir = cordova.file.dataDirectory;
   var filename = downloadService.versionToFetch + '_';
   if (utils.hasFileExtension(url, 'js')) {
     filename = filename + constants.JS_FILE_NAME;
   } else if (utils.hasFileExtension(url, 'css')) {
     filename = filename + constants.CSS_FILE_NAME;
+    destinationDir = destinationDir + constants.CSS_DIRECTORY;
   } else {
     // I don't think this should be able to occur.
     downloadService.errorCallback('Encountered unexpected filetype', url);
@@ -115,7 +117,7 @@ function downloadFile(url) {
   }
 
   window.resolveLocalFileSystemURL(
-    cordova.file.dataDirectory,
+    destinationDir,
     function (directory) {
       directory.getFile(
         filename, {
