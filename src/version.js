@@ -1,5 +1,6 @@
 'use strict';
 var logger = require('./logger');
+var R = require('ramda');
 
 /* Version Check
 –––––––––––––––––––––––––––––––––––––––––––––––––– */
@@ -31,11 +32,19 @@ version.fetchAllVersions = function (url, successCallback, errorCallback) {
     errorCallback();
   };
 
-  xhr.onreadystatechange = function () {
+  xhr.onreadystatechange = function handleVersions() {
+    var sortFn = R.compose(R.reverse, R.sortBy(R.prop('timestamp')));
+    // We're looking at PRs
+    var versions = sortFn(this.response.prs);
+    var master = R.find(function(_version) {
+      return _version.branch === 'master';
+    })(this.response.branches);
+    versions.unshift(master);
+
     /*eslint-disable eqeqeq */
     if (this.readyState == 4 && this.status == 200) {
       /*eslint-enable eqeqeq */
-      successCallback(this.response.prs);
+      successCallback(versions);
     }
   };
 

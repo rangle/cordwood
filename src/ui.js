@@ -10,7 +10,13 @@ var body, head;
  * Helper to generate text content of the list item
  */
 function itemContent(item) {
-  return ['<strong>PR#', item.pr, '</strong>', '(', item.branch, ')'].join(' ');
+  if (item.pr !== undefined) {
+    return ['<strong>PR#', item.pr, '</strong>'].join(' ');
+  } else if (item.branch !== undefined){
+    return ['<strong>Branch:', item.branch, '</strong>'].join(' ');
+  } else {
+    throw new Error('Can\'t read version\'s identifier');
+  }
 }
 
 /**
@@ -54,7 +60,16 @@ function generateHeader() {
   var h1 = document.createElement('h1');
   h1.innerHTML = 'Available Versions';
 
+  var clearDataButton = document.createElement('button');
+  clearDataButton.innerText = 'Clear local storage';
+  clearDataButton.onclick = function () {
+    localStorage.clear();
+    this.setAttribute('disabled', '');
+    this.innerText = '✓ Cleared';
+  };
+
   header.appendChild(h1);
+  header.appendChild(clearDataButton);
   body.appendChild(header);
 }
 

@@ -1,6 +1,6 @@
 {
   "name": "cordwood",
-  "version": "1.0.0",
+  "version": "0.1.2",
   "description": "cordwood",
   "main": "dist/cordwood.js",
   "scripts": {
@@ -42,5 +42,6 @@
     "karma-wrap-preprocessor": "^0.1.0"
   },
   "dependencies": {
+    "ramda": "~0.15.1"
   }
 }
