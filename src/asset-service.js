@@ -98,7 +98,11 @@ assetService.setup = function setup(src, dest) {
       createDirInDestRoot = assetService.makeDirectoryCreator(
         _destinationDirectoryEntry);
       createDirInDestRoot(constants.CSS_DIRECTORY);
-      copyAssets();
+      // HACK We should have a storage service that handles this
+      if (localStorage.assetServiceHasRun !== 'true') {
+        copyAssets();
+        localStorage.assetServiceHasRun = 'true';
+      }
     });
 };
 

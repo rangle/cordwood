@@ -31,7 +31,7 @@ styles.jsonCSS = {
 
   ul: {
     listStyle: 'none',
-    margin: '5.5rem 0 0 0',
+    margin: '7rem 0 0 0',
     padding: 0
   },
 
