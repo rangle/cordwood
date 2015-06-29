@@ -1,4 +1,5 @@
 'use strict';
+var constants = require('./constants');
 var logger = require('./logger');
 var R = require('ramda');
 
@@ -14,7 +15,28 @@ var version = {};
  * request completes.
  * @param errorCallback : The callback for when the version request fails.
  */
-version.fetchAllVersions = function (url, successCallback, errorCallback) {
+version.fetchAllVersions = function (options) {
+  var url = options.url;
+  var successCallback = options.successCallback;
+  var errorCallback = options.errorCallback;
+  var versionsToFetch = options.versionsToFetch || constants.DEFAULT_VERSIONS_TO_FETCH;
+
+function makeVersionExtractor(versionsToExtract) {
+  return function extractVersions(allVersions) {
+    var sortFn = R.compose(R.reverse, R.sortBy(R.prop('timestamp')));
+    var sortedPrs;
+
+    if (versionsToExtract.prs != null) {
+      sortedPrs = sortFn(allVersions.prs);
+      return R.slice(0, versionsToExtract.prs)(sortedPrs);
+    } else if (versionsToExtract.branch != null) {
+      return R.filter(R.propEq('branch', versionsToExtract.branch))(allVersions.branches);
+    } else {
+      throw new Error('Unrecognized version type');
+    }
+  };
+}
+
   logger('fetching all available versions from %s', url);
 
   var xhr = new XMLHttpRequest();
@@ -32,14 +54,13 @@ version.fetchAllVersions = function (url, successCallback, errorCallback) {
     errorCallback();
   };
 
-  xhr.onreadystatechange = function handleVersions() {
-    var sortFn = R.compose(R.reverse, R.sortBy(R.prop('timestamp')));
-    // We're looking at PRs
-    var versions = sortFn(this.response.prs);
-    var master = R.find(function(_version) {
-      return _version.branch === 'master';
-    })(this.response.branches);
-    versions.unshift(master);
+  xhr.onload = function handleVersions() {
+    var that = this;
+    var versions = [];
+    versionsToFetch.forEach(function appendVersions(versionsToExtract) {
+      var thoseVersions = makeVersionExtractor(versionsToExtract)(that.response);
+      versions = versions.concat(thoseVersions);
+    });
 
     /*eslint-disable eqeqeq */
     if (this.readyState == 4 && this.status == 200) {

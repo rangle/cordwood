@@ -124,16 +124,27 @@ describe('Version', function() {
           JSON.stringify(mockVersions));
         });
 
-      version.fetchAllVersions('/versions', function(versions) {
-        expect(versions).to.be.equal(mockVersions.list);
-      });
+      var successCallback = function (versions) {
+        expect(versions).to.deep.equal(mockVersions.branches);
+      };
 
+      version.fetchAllVersions({
+        'url': '/versions',
+        'versionsToFetch': [{'branch': 'master'}],
+        'successCallback': successCallback,
+        'errorCallback': null
+      });
     });
 
     it('should invoke an error handler when the request aborts', function () {
       var errorCallbackStub = sinon.stub();
 
-      var xhr = version.fetchAllVersions('/versions', null, errorCallbackStub);
+      var xhr = version.fetchAllVersions({
+        'url': '/versions',
+        'versionsToFetch': [],
+        'successCallback': null,
+        'errorCallback': errorCallbackStub
+      });
       var onerrorSpy = sinon.spy(xhr, 'onerror');
       xhr.abort();
 
@@ -146,7 +157,12 @@ describe('Version', function() {
     it('should behave as expected when a timeout occurs', function () {
       var errorCallbackStub = sinon.stub();
 
-      var xhr = version.fetchAllVersions('/versions', null, errorCallbackStub);
+      var xhr = version.fetchAllVersions({
+        'url': '/versions',
+        'versionsToFetch': [],
+        'successCallback': null,
+        'errorCallback': errorCallbackStub
+      });
       xhr.ontimeout();
 
       expect(errorCallbackStub.called).to.be.true;

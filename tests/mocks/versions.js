@@ -21,6 +21,11 @@ var versions = {
     'pr': 39,
     'path': '/branch/feature-qux',
     'timestamp': '2015-05-21T19:34:57.873Z'
+  }],
+  branches: [{
+    'branch': 'master',
+    'path': '/branch/master',
+    'timestamp': '2015-05-21T19:34:57.873Z'
   }]
 };
 

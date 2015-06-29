@@ -23,7 +23,7 @@
     "eqeqeq": [2, "smart"],
     "no-use-before-define": 2,
     "no-redeclare": 2,
-    "no-inner-declarations": "both",
+    "no-inner-declarations": [1, "both"],
     "no-unused-vars": [2, {"vars": "all", "args": "after-used"}],
     "no-undef": 2,
     "no-floating-decimal": 2,
