@@ -1,6 +1,7 @@
 'use strict';
-var bootstrap = require('./bootstrap');
 var assetService = require('./asset-service');
+var bootstrap = require('./bootstrap');
+var constants = require('./constants');
 var downloadService = require('./download-service');
 var logger = require('./logger');
 var ui = require('./ui');
@@ -17,6 +18,9 @@ function Cordwood(options) {
   var errorCallback = options.errorCallback;
   var multipleVersions = options.multipleVersions || false;
   var assetDirectories = options.assetDirectories;
+  // More like "versionsToDisplay" right now, but let's assume our server can
+  // get smarter
+  var versionsToFetch = options.versionsToFetch;
 
   (function setup() {
 
@@ -31,10 +35,14 @@ function Cordwood(options) {
 
     if (multipleVersions) {
       // Fetch all available versions
-      version.fetchAllVersions(urls.allVersions, onFetchAllVersions, function () {
-        // If Fetch all versions fails then default to refreshing master
-        version.fetchLatestVersion(urls.latestVersion,
-          onFetchLatestVersion);
+      version.fetchAllVersions({
+        'url': urls.allVersions,
+        'versionsToFetch': versionsToFetch,
+        'successCallback': onFetchAllVersions,
+        'errorCallback': function () {
+          // If Fetch all versions fails then default to refreshing master
+          version.fetchLatestVersion(urls.latestVersion, onFetchLatestVersion);
+        }
       });
     } else {
       // Fetch the latest version number and respond accordingly

@@ -36,6 +36,7 @@ assetService.makeDirectoryCreator = function makeDirectoryCreator(root) {
     logger(['Creating path:', directoryPath, 'in root:', root].join(' '));
     // Tokenize the directory path
     var directoryNames = directoryPath.split('/');
+    var thisDirectory;
     /* Get rid of empty strings (this makes the function work even if a trailing
      * slash is present. A side effect of that is that src//cordwood is also
      * treated the same as src/cordwood
@@ -51,7 +52,7 @@ assetService.makeDirectoryCreator = function makeDirectoryCreator(root) {
       }
     } else if (directoryNames.length > 0) {
       // This modifies directoryNames
-      var thisDirectory = directoryNames.shift(1);
+      thisDirectory = directoryNames.shift(1);
       root.getDirectory(
         thisDirectory, {
           'create': true
