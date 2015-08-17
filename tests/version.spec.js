@@ -57,7 +57,7 @@ describe('Version', function() {
       this.server.restore();
     });
 
-    it('should be able to fetch new version', function() {
+    it('should be able to fetch new version', function(done) {
       this.server.respondWith(/\/version\?(\d+)/, function(xhr, id) {
         xhr.response = { version: '1.1.0' };
         xhr.respond(200,
@@ -67,6 +67,7 @@ describe('Version', function() {
 
       version.fetchLatestVersion('/version', function(newVersion) {
         expect(newVersion).to.be.equal('1.1.0');
+        done();
       });
 
     });
@@ -116,7 +117,7 @@ describe('Version', function() {
       this.server.restore();
     });
 
-    it('should be able to fetch all available versions', function() {
+    it('should be able to fetch all available versions', function(done) {
       this.server.respondWith(/\/versions\?(\d+)/, function(xhr, id) {
         xhr.response = mockVersions;
         xhr.respond(200,
@@ -126,6 +127,7 @@ describe('Version', function() {
 
       var successCallback = function (versions) {
         expect(versions).to.deep.equal(mockVersions.branches);
+        done();
       };
 
       version.fetchAllVersions({

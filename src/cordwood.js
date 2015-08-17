@@ -1,7 +1,6 @@
 'use strict';
 var assetService = require('./asset-service');
 var bootstrap = require('./bootstrap');
-var constants = require('./constants');
 var downloadService = require('./download-service');
 var logger = require('./logger');
 var ui = require('./ui');
@@ -23,9 +22,7 @@ function Cordwood(options) {
   var versionsToFetch = options.versionsToFetch;
 
   (function setup() {
-
     assetService.setup(assetDirectories, cordova.file.dataDirectory);
-
     // Setup the callbacks for bootstrapping the app
     bootstrap.setup(successCallback, errorCallback);
     // If a current version is not available
@@ -33,21 +30,16 @@ function Cordwood(options) {
       version.setCurrent(currentVersion);
     }
 
-    if (multipleVersions) {
-      // Fetch all available versions
-      version.fetchAllVersions({
-        'url': urls.allVersions,
-        'versionsToFetch': versionsToFetch,
-        'successCallback': onFetchAllVersions,
-        'errorCallback': function () {
-          // If Fetch all versions fails then default to refreshing master
-          version.fetchLatestVersion(urls.latestVersion, onFetchLatestVersion);
-        }
-      });
-    } else {
-      // Fetch the latest version number and respond accordingly
-      version.fetchLatestVersion(urls.latestVersion, onFetchLatestVersion);
-    }
+    // Fetch all available versions
+    version.fetchAllVersions({
+      'url': urls.allVersions,
+      'versionsToFetch': versionsToFetch,
+      'successCallback': onFetchAllVersions,
+      'errorCallback': function () {
+        // If Fetch all versions fails then default to refreshing master
+        version.fetchLatestVersion(urls.latestVersion, onFetchLatestVersion);
+      }
+    });
 
   })();
 
@@ -98,10 +90,15 @@ function Cordwood(options) {
    * Success callback for fetching all versions.
    */
   function onFetchAllVersions(versions) {
-    ui.init(versions, function (url) {
-      ui.teardown();
-      version.fetchLatestVersion(url, onFetchLatestVersion);
-    });
+    if (multipleVersions === true) {
+      ui.init(versions, function (url) {
+        ui.teardown();
+        version.fetchLatestVersion(url, onFetchLatestVersion);
+      });
+    } else {
+      urls.initForPr(versions[0].path);
+      version.fetchLatestVersion(urls.latestVersion, onFetchLatestVersion);
+    }
   }
 }
 

@@ -25,14 +25,12 @@ function itemContent(item) {
 function generateListItem(item, clickFn) {
   var listItem = document.createElement('li');
   listItem.innerHTML = itemContent(item);
-  listItem.onclick = (function () {
-    return function () {
-      urls.initForPr(item.path);
-      item.latestVersion = urls.latestVersion;
-      // make the result available for testing
-      return clickFn(item.latestVersion);
-    };
-  })();
+  listItem.onclick = function() {
+    urls.initForPr(item.path);
+    item.latestVersion = urls.latestVersion;
+    // make the result available for testing
+    return clickFn(item.latestVersion);
+  };
 
   return listItem;
 }
@@ -111,7 +109,6 @@ function teardown() {
   list.parentNode.removeChild(list);
   _styles.parentNode.removeChild(_styles);
 }
-
 
 module.exports.init = init;
 module.exports.teardown = teardown;
