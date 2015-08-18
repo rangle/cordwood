@@ -1,0 +1,26 @@
+{
+  "name": "cordwood",
+  "version": "0.1.4-rc.1",
+  "authors": [
+    "Sumit Arora <sumit@rangle.io>",
+    "Varun Vachhar <varun@rangle.io>",
+    "Christine Davis <christine@rangle.io>",
+    "Ahmed Al-Sudani <ahmed.alsudani@rangle.io>"
+  ],
+  "moduleType": [
+    "globals"
+  ],
+  "main": "dist/cordwood.js",
+  "keywords": [
+    "cordova",
+    "phonegap"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}
