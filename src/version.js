@@ -105,11 +105,13 @@ version.fetchLatestVersion = function (url, callback) {
   };
 
   xhr.onreadystatechange = function () {
+    var newVersion;
     /*eslint-disable eqeqeq */
     if (this.readyState == 4 && this.status == 200) {
+      newVersion = this.response.version;
       /*eslint-enable eqeqeq */
-      version.setUpdated(this.response.version);
-      callback();
+      version.setUpdated(newVersion);
+      callback(newVersion);
     }
   };
 

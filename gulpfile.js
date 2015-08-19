@@ -34,7 +34,8 @@ gulp.task('lint', function() {
   return gulp.src(srcFiles)
     .pipe(eslint())
     .pipe(eslint.format())
-    .pipe(eslint.failOnError())});
+    .pipe(eslint.failOnError());
+});
 
 
 gulp.task('beautify', function() {
@@ -45,7 +46,7 @@ gulp.task('beautify', function() {
 });
 
 // Testing
-gulp.task('test', [], function (done) {
+gulp.task('test', ['lint'], function (done) {
   karma.start({
     configFile: __dirname + '/tests/karma.conf.js',
     singleRun: true
@@ -55,7 +56,9 @@ gulp.task('test', [], function (done) {
 
 gulp.task('tdd', function (done) {
   karma.start({
-    configFile: __dirname + '/tests/karma.conf.js'
+    configFile: __dirname + '/tests/karma.conf.js',
+    singleRun: false,
+    autoWatch: true
   }, done);
 });
 
