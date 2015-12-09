@@ -10,8 +10,8 @@ Install Dependencies
 --------------
 1. Install Cordwood as a dependency: `bower install https://github.com/rangle/cordwood.git`
 2. Install the following Cordova plugins:
-  + `cordova-plugin-file-transfer`
-  + `cordova-plugin-file`
+  + `cordova-plugin-file-transfer` or use `org.apache.cordova.file-transfer` for Cordova versions below 5
+  + `cordova-plugin-file` or `org.apache.cordova.file` for Cordova versions below 5
 
 
 Getting Setup
