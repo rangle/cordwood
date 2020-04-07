@@ -43,6 +43,6 @@
     "sinon": "~1.14"
   },
   "dependencies": {
-    "ramda": "~0.15.1"
+    "ramda": "~0.27.0"
   }
 }
